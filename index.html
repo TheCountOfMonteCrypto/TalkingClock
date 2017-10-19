@@ -1,0 +1,247 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Count's Talking Clock</title>
+<meta name="author" content="The Count of Monte Crypto">
+<meta name="description" content="The time being told to you by The Count of Monte Crypto">
+<meta name="viewport" content="width=530">
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<style>
+		html {
+			height: 100%;
+			overflow:hidden;
+		}
+	
+		body {
+			background-color: #111111;
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			font-family: "Arial Black", Gadget, sans-serif;
+			font-size: 11px;
+		}
+	   
+	   
+		a:link, a:visited, a:hover: a:active { color: white; }
+
+   
+	   #centreMe {
+			width:500px;
+			height:650px;
+			position:absolute;
+			margin-top:-325px;
+			margin-left:-250px;
+			top:50%;
+			left:50%;
+			text-align: center;
+			background: none;
+	   }
+	   
+	   #header {
+	   
+			text-align: center;
+			font-size: 50px;
+			color: #ffffff;
+			width: 500px;
+			padding: 20px 0;
+			font-weight: 800;
+			background: none;
+	   }
+	   
+		#clockimage {
+				width: 500px;
+				height: 375px;
+				background-color: #000000;
+				background-image: url("me.png");
+		}
+	   
+	   #buttons {
+			width: 500px;
+			padding: 20px 0 50px;
+			background: none;
+	   }
+	   
+		.playbutton {
+			display: inline-block;
+			padding: 15px 25px;
+			font-size: 30px;
+			font-weight: bold;
+			cursor: pointer;
+			text-align: center;
+			text-decoration: none;
+			outline: none;
+			color: #000000;
+			background-color: #ffffff;
+			border: 1px solid #000000;
+			border-radius: 30px;
+		}
+		
+		.playbutton:hover {background-color: #ffffff}
+
+		.playbutton:active {
+			background-color: #ffffff;
+		}		
+		
+
+	 </style>
+
+</head>
+
+<body onload="init();">
+<script src="http://code.createjs.com/soundjs-0.5.2.min.js"></script>
+
+    <div id="centreMe">
+			<div id="header">The Count of Monte Crypto's<br>Speaking Clock!</div>
+			<div id="clockimage"></div>
+			<div id="buttons"><input type="button" id="listenbutton" onclick="tellTime()" class="playbutton" value="Loading" disabled></input></div>
+			
+	</div>		
+    <script>
+        var preload;
+		var clockIsSpeaking = false;
+		var numOfSoundsLoaded = 0;
+		var manifest;
+
+        function init() {
+            if (window.top != window) {
+                document.getElementById("header").style.display = "none";
+            }
+
+            if (!createjs.Sound.initializeDefaultPlugins()) {
+                document.getElementById("error").style.display = "block";
+                document.getElementById("centerMe").style.display = "none";
+                return;
+            }
+
+            var assetsPath = "sound/";
+            manifest = [
+				{src:"1h.ogg", id:"1h"},
+				{src:"2h.ogg", id:"2h"},
+				{src:"3h.ogg", id:"3h"},
+				{src:"4h.ogg", id:"4h"},
+				{src:"5h.ogg", id:"5h"},
+				{src:"5m.ogg", id:"5m"},
+				{src:"6h.ogg", id:"6h"},
+				{src:"7h.ogg", id:"7h"},
+				{src:"8h.ogg", id:"8h"},
+				{src:"9h.ogg", id:"9h"},
+				{src:"10h.ogg", id:"10h"},
+				{src:"10m.ogg", id:"10m"},
+				{src:"11h.ogg", id:"11h"},
+				{src:"12h.ogg", id:"12h"},
+				{src:"20m.ogg", id:"20m"},
+				{src:"25m.ogg", id:"25m"},
+				{src:"comingupto.ogg", id:"comingupto"},
+				{src:"half.ogg", id:"half"},
+				{src:"intro.ogg", id:"intro"},
+				{src:"justleft.ogg", id:"justleft"},
+				{src:"past.ogg", id:"past"},
+				{src:"quarter.ogg", id:"quarter"},
+				{src:"to.ogg", id:"to"}				
+            ];
+			
+			createjs.Sound.alternateExtensions = ["mp3"];	
+			createjs.Sound.alternateExtensions = ["mp3"];	
+            createjs.Sound.addEventListener("fileload", createjs.proxy(soundLoaded, this)); 
+            createjs.Sound.registerManifest(manifest, assetsPath);
+        }
+
+        function soundLoaded(event) {
+			numOfSoundsLoaded++;
+			console.log("numOfSoundsLoaded = "+numOfSoundsLoaded);
+			if (numOfSoundsLoaded == manifest.length) {
+				document.getElementById("listenbutton").disabled = false;
+				document.getElementById("listenbutton").value = "Play";
+				console.log("All sounds loaded");
+
+			}
+        }
+		
+		function stop() {
+            if (preload != null) { preload.close(); }
+            createjs.Sound.stop();
+        }
+
+	function tellTime() {
+	
+		if (clockIsSpeaking) {
+			return;
+		} else {
+			clockIsSpeaking = true;
+			
+		}
+	
+		document.getElementById("listenbutton").disabled = true;
+
+		var myDate = new Date();
+		var myHour = myDate.getHours();
+		var myMinute = myDate.getMinutes();
+		var minuteDivBy5 = myMinute / 5;
+		var roundMinuteDivBy5 = Math.round(minuteDivBy5);
+		myHour = myHour % 12 || 12; 
+
+		var speakingArray = ["intro"]; 
+		var currentSoundIndex = 0; 
+
+		if (myMinute > 0) {
+			if (minuteDivBy5 != roundMinuteDivBy5) {
+				if (roundMinuteDivBy5 < minuteDivBy5) {
+					speakingArray.push("justleft");
+					console.log("justleft")
+				} else {
+					speakingArray.push("comingupto");
+					console.log("comingupto")
+				}
+			}
+			if (roundMinuteDivBy5 == 6) { 
+				speakingArray.push("half", "past");
+				console.log("half past");
+			} else if (roundMinuteDivBy5 == 3) {
+				speakingArray.push("quarter", "past");
+				console.log("quarter past");
+			} else if (roundMinuteDivBy5 == 9) {
+				speakingArray.push("quarter", "to");
+				console.log("quarter to");
+			} else if (roundMinuteDivBy5 > 0 && roundMinuteDivBy5 < 7) {
+				speakingArray.push((roundMinuteDivBy5 * 5) + "m", "past");
+				console.log((roundMinuteDivBy5 * 5) + "m past");
+			} else if (roundMinuteDivBy5 >= 7 && roundMinuteDivBy5 < 12) {
+				speakingArray.push((60 - (roundMinuteDivBy5 * 5)) + "m", "to");
+				console.log("etc");
+			}
+
+		}
+		if (myMinute < 33) {
+			speakingArray.push(myHour + "h");
+			console.log(myHour + "h");
+		} else {
+			if (myHour < 12) {
+				speakingArray.push(myHour + 1 + "h");
+				console.log(myHour + 1 + "h");
+			} else {
+				console.log("1h");
+				speakingArray.push("1h");
+			}
+		}	
+		var soundToPlay = speakingArray[currentSoundIndex];
+		console.log(soundToPlay);
+		var instance = createjs.Sound.play(soundToPlay, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+		instance.on("complete", handleComplete);
+		function handleComplete (){
+			if (currentSoundIndex + 1 <= speakingArray.length-1) {			
+				currentSoundIndex++;
+				soundToPlay = speakingArray[currentSoundIndex];
+				var instance = createjs.Sound.play(soundToPlay, createjs.Sound.INTERRUPT_NONE, 0, 0, false, 1);
+				instance.on("complete", handleComplete);
+			} else {
+				clockIsSpeaking = false;
+				document.getElementById("listenbutton").disabled = false;
+			}					
+		}
+	}
+    </script>
+</script>	
+
+</body>
+</html>
