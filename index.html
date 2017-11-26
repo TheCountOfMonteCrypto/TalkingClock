@@ -89,10 +89,12 @@
 </head>
 
 <body onload="init();">
+<php>
 $url = "https://api.bitfinex.com/v1/ticker/btcusd";
 $json = json_decode(file_get_contents($url), true);
 $price = $json["last_price"];
 echo $price;
+	</php>
 <script src="https://code.createjs.com/soundjs-0.5.2.min.js"></script>
 
     <div id="centreMe">
