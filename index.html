@@ -2,6 +2,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+		    <script>
+$.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
+    function(data, status){
+      alert("price: "+data +" status: " + status);
+    }
+)
+</script>
 <title>The Count's Talking Clock</title>
 <meta name="author" content="The Count of Monte Crypto">
 <meta name="description" content="The time being told to you by The Count of Monte Crypto">
@@ -93,13 +100,6 @@
 
     <div id="centreMe">
 			<div id="header">The Count of Monte Crypto's<br>Speaking Clock!</div>
-	    <script>
-$.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
-    function(data, status){
-      alert("price: "+data +" status: " + status);
-    }
-)
-</script>
 			<div id="clockimage"></div>
 			<div id="buttons"><input type="button" id="listenbutton" onclick="tellTime()" class="playbutton" value="Loading" disabled></input></div>
 			
@@ -249,6 +249,12 @@ $.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
 	}
     </script>
 </script>	
-
+<script>
+$.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
+    function(data, status){
+      alert("price: "+data +" status: " + status);
+    }
+)
+</script>
 </body>
 </html>
