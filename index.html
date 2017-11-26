@@ -249,12 +249,10 @@ $.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
 	}
     </script>
 </script>	
-<script>
-$.getJSON("https://api.bitfinex.com/v1/pubticker/:last_price",
-    function(data, status){
-      alert("price: "+data +" status: " + status);
-    }
-)
-</script>
+
+<input class="Num Seg LeftSeg" id="numField" onblur="fieldBlur(this)" onfocus="if (!this.active) this.active = true; numFocus()" onmousedown="this.active = this.active || (doc.activeElement !== this)" onmouseup="var a = this.active; this.active = false; if (a) return false" style="font-weight: 400; width: 163px; color: rgb(0, 0, 0); transition-duration: 1s, 0.25s; transition-property: color, width;" type="text">
+
+
+
 </body>
 </html>
